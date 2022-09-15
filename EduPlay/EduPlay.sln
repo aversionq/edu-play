@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduPlay.WebAPI", "EduPlay.WebAPI\EduPlay.WebAPI.csproj", "{EE9327F9-E43E-4A16-9313-0CCC868F7853}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE9327F9-E43E-4A16-9313-0CCC868F7853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE9327F9-E43E-4A16-9313-0CCC868F7853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE9327F9-E43E-4A16-9313-0CCC868F7853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE9327F9-E43E-4A16-9313-0CCC868F7853}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6193F2A4-C1D4-41A4-AC5B-891DEF71C9A4}
+	EndGlobalSection
+EndGlobal
