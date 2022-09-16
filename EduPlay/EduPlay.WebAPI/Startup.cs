@@ -31,7 +31,8 @@ namespace EduPlay.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            //services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddDbContext<AuthDbContext>(
                 options => options.UseNpgsql(Configuration.GetConnectionString("AppDb")));
