@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace EduPlay.WebAPI
+namespace EduPlay.WebAPI.Auth
 {
     public class AuthDbContext : IdentityDbContext<ApplicationUser>
     {
