@@ -1,4 +1,5 @@
 ﻿using EduPlay.WebAPI.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +58,74 @@ namespace EduPlay.WebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating a user");
             }
 
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+            }
+            if (!await _roleManager.RoleExistsAsync(UserRoles.DefaultUser))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.DefaultUser));
+            }
+            if (!await _roleManager.RoleExistsAsync(UserRoles.PremiumUser))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.PremiumUser));
+            }
+            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            {
+                await _userManager.AddToRoleAsync(user, UserRoles.DefaultUser);
+            }
+
             return Ok("User created");
+        }
+
+        [Authorize(Roles = UserRoles.Admin)]
+        [HttpPost]
+        [Route("RegisterAdmin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
+        {
+            var userExist = await _userManager.FindByEmailAsync(model.Email);
+            if (userExist != null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "User already exists");
+            }
+
+            ApplicationUser user = new ApplicationUser()
+            {
+                Email = model.Email,
+                Name = model.Name,
+                Age = model.Age,
+                Surname = model.Surname,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                IsBanned = false,
+                UserName = model.Email
+            };
+
+            Console.WriteLine($"Username: {user.UserName}");
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating a user");
+            }
+
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+            }
+            if (!await _roleManager.RoleExistsAsync(UserRoles.DefaultUser))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.DefaultUser));
+            }
+            if (!await _roleManager.RoleExistsAsync(UserRoles.PremiumUser))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.PremiumUser));
+            }
+            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            {
+                await _userManager.AddToRoleAsync(user, UserRoles.Admin);
+            }
+
+            return Ok("Admin created");
         }
 
         [HttpPost]
