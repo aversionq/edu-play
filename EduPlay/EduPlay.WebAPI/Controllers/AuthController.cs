@@ -50,8 +50,6 @@ namespace EduPlay.WebAPI.Controllers
                 UserName = model.Email
             };
 
-            Console.WriteLine($"Username: {user.UserName}");
-
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
@@ -99,8 +97,6 @@ namespace EduPlay.WebAPI.Controllers
                 IsBanned = false,
                 UserName = model.Email
             };
-
-            Console.WriteLine($"Username: {user.UserName}");
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
