@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace EduPlay.WebAPI.Auth
@@ -10,7 +11,7 @@ namespace EduPlay.WebAPI.Auth
         [Required]
         public string Surname { get; set; }
         [Required]
-        public int Age { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public bool IsBanned { get; set; } = false;
     }
 }

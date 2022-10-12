@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace EduPlay.WebAPI.Auth
 {
@@ -8,8 +9,8 @@ namespace EduPlay.WebAPI.Auth
         public string Name { get; set; }
         [Required(ErrorMessage = "Surname is required")]
         public string Surname { get; set; }
-        [Required(ErrorMessage = "Age is required")]
-        public int Age { get; set; }
+        [Required(ErrorMessage = "Date of birth is required")]
+        public DateTime DateOfBirth { get; set; }
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Password is required")]

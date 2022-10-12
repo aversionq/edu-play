@@ -43,7 +43,7 @@ namespace EduPlay.WebAPI.Controllers
             {
                 Email = model.Email,
                 Name = model.Name,
-                Age = model.Age,
+                DateOfBirth = model.DateOfBirth,
                 Surname = model.Surname,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 IsBanned = false,
@@ -91,7 +91,7 @@ namespace EduPlay.WebAPI.Controllers
             {
                 Email = model.Email,
                 Name = model.Name,
-                Age = model.Age,
+                DateOfBirth = model.DateOfBirth,
                 Surname = model.Surname,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 IsBanned = false,
