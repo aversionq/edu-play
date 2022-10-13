@@ -35,6 +35,14 @@ namespace EduPlay.WebAPI
             //services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
 
+            // Password settings.
+            services.Configure<IdentityOptions>(o =>
+            {
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequireUppercase = false;
+            });
+
+            // Swagger settings.
             services.AddSwaggerGen(o =>
             {
                 o.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -69,6 +77,7 @@ namespace EduPlay.WebAPI
                 .AddEntityFrameworkStores<AuthDbContext>()
                 .AddDefaultTokenProviders();
 
+            // JWT settings.
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
