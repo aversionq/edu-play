@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace EduPlay.WebAPI.Models
+namespace EduPlay.DAL.Entities
 {
     public partial class EduPlayContext : DbContext
     {
@@ -22,7 +22,7 @@ namespace EduPlay.WebAPI.Models
         public virtual DbSet<Difficulties> Difficulties { get; set; }
         public virtual DbSet<Games> Games { get; set; }
         public virtual DbSet<Themes> Themes { get; set; }
-        // public virtual DbSet<UserGameRecords> UserGameRecords { get; set; }
+        public virtual DbSet<UserGameRecords> UserGameRecords { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -96,32 +96,32 @@ namespace EduPlay.WebAPI.Models
                     .HasColumnType("character varying");
             });
 
-            //modelBuilder.Entity<UserGameRecords>(entity =>
-            //{
-            //    entity.Property(e => e.Id)
-            //        .HasColumnName("id")
-            //        .ValueGeneratedNever();
+            modelBuilder.Entity<UserGameRecords>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
 
-            //    entity.Property(e => e.GameId).HasColumnName("game_id");
+                entity.Property(e => e.GameId).HasColumnName("game_id");
 
-            //    entity.Property(e => e.Score).HasColumnName("score");
+                entity.Property(e => e.Score).HasColumnName("score");
 
-            //    entity.Property(e => e.UserId)
-            //        .IsRequired()
-            //        .HasColumnName("user_id");
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasColumnName("user_id");
 
-            //    entity.HasOne(d => d.Game)
-            //        .WithMany(p => p.UserGameRecords)
-            //        .HasForeignKey(d => d.GameId)
-            //        .OnDelete(DeleteBehavior.ClientSetNull)
-            //        .HasConstraintName("fk_GameRecord");
+                entity.HasOne(d => d.Game)
+                    .WithMany(p => p.UserGameRecords)
+                    .HasForeignKey(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_GameRecord");
 
-            //    entity.HasOne(d => d.User)
-            //        .WithMany(p => p.UserGameRecords)
-            //        .HasForeignKey(d => d.UserId)
-            //        .OnDelete(DeleteBehavior.ClientSetNull)
-            //        .HasConstraintName("fk_UserRecord");
-            //});
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserGameRecords)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_UserRecord");
+            });
 
             OnModelCreatingPartial(modelBuilder);
         }

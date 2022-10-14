@@ -7,14 +7,13 @@ using System.Collections.Generic;
 
 namespace EduPlay.DAL.Entities
 {
-    public partial class UserGameRecords
+    public partial class AspNetUserTokens
     {
-        public Guid Id { get; set; }
-        public Guid GameId { get; set; }
-        public int Score { get; set; }
         public string UserId { get; set; }
+        public string LoginProvider { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
 
-        public virtual Games Game { get; set; }
         public virtual AspNetUsers User { get; set; }
     }
 }

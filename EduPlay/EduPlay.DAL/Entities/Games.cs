@@ -5,14 +5,14 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace EduPlay.WebAPI.Models
+namespace EduPlay.DAL.Entities
 {
     public partial class Games
     {
-        //public Games()
-        //{
-        //    UserGameRecords = new HashSet<UserGameRecords>();
-        //}
+        public Games()
+        {
+            UserGameRecords = new HashSet<UserGameRecords>();
+        }
 
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -23,6 +23,6 @@ namespace EduPlay.WebAPI.Models
 
         public virtual Difficulties Difficulty { get; set; }
         public virtual Themes Theme { get; set; }
-        // public virtual ICollection<UserGameRecords> UserGameRecords { get; set; }
+        public virtual ICollection<UserGameRecords> UserGameRecords { get; set; }
     }
 }
