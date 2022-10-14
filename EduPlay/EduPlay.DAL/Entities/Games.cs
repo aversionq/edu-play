@@ -9,12 +9,20 @@ namespace EduPlay.WebAPI.Models
 {
     public partial class Games
     {
+        //public Games()
+        //{
+        //    UserGameRecords = new HashSet<UserGameRecords>();
+        //}
+
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid DifficultyId { get; set; }
         public Guid ThemeId { get; set; }
+        public int AgeLimit { get; set; }
+        public int MaxScore { get; set; }
 
         public virtual Difficulties Difficulty { get; set; }
         public virtual Themes Theme { get; set; }
+        // public virtual ICollection<UserGameRecords> UserGameRecords { get; set; }
     }
 }

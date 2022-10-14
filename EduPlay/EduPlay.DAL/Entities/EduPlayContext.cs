@@ -22,6 +22,7 @@ namespace EduPlay.WebAPI.Models
         public virtual DbSet<Difficulties> Difficulties { get; set; }
         public virtual DbSet<Games> Games { get; set; }
         public virtual DbSet<Themes> Themes { get; set; }
+        // public virtual DbSet<UserGameRecords> UserGameRecords { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -50,6 +51,10 @@ namespace EduPlay.WebAPI.Models
             modelBuilder.Entity<Games>(entity =>
             {
                 entity.ToTable("games");
+
+                entity.HasIndex(e => e.DifficultyId);
+
+                entity.HasIndex(e => e.ThemeId);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -90,6 +95,33 @@ namespace EduPlay.WebAPI.Models
                     .HasColumnName("name")
                     .HasColumnType("character varying");
             });
+
+            //modelBuilder.Entity<UserGameRecords>(entity =>
+            //{
+            //    entity.Property(e => e.Id)
+            //        .HasColumnName("id")
+            //        .ValueGeneratedNever();
+
+            //    entity.Property(e => e.GameId).HasColumnName("game_id");
+
+            //    entity.Property(e => e.Score).HasColumnName("score");
+
+            //    entity.Property(e => e.UserId)
+            //        .IsRequired()
+            //        .HasColumnName("user_id");
+
+            //    entity.HasOne(d => d.Game)
+            //        .WithMany(p => p.UserGameRecords)
+            //        .HasForeignKey(d => d.GameId)
+            //        .OnDelete(DeleteBehavior.ClientSetNull)
+            //        .HasConstraintName("fk_GameRecord");
+
+            //    entity.HasOne(d => d.User)
+            //        .WithMany(p => p.UserGameRecords)
+            //        .HasForeignKey(d => d.UserId)
+            //        .OnDelete(DeleteBehavior.ClientSetNull)
+            //        .HasConstraintName("fk_UserRecord");
+            //});
 
             OnModelCreatingPartial(modelBuilder);
         }
