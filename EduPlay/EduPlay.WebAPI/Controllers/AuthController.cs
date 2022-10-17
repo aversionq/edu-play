@@ -33,7 +33,8 @@ namespace EduPlay.WebAPI.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var userExist = await _userManager.FindByEmailAsync(model.Email);
+            var userExist = await _userManager.FindByEmailAsync(model.Email) ??
+                await _userManager.FindByNameAsync(model.UserName);
             if (userExist != null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "User already exists");
@@ -47,7 +48,7 @@ namespace EduPlay.WebAPI.Controllers
                 Surname = model.Surname,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 IsBanned = false,
-                UserName = model.Email
+                UserName = model.UserName
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -81,7 +82,8 @@ namespace EduPlay.WebAPI.Controllers
         [Route("RegisterAdmin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
         {
-            var userExist = await _userManager.FindByEmailAsync(model.Email);
+            var userExist = await _userManager.FindByEmailAsync(model.Email) ??
+                await _userManager.FindByNameAsync(model.UserName);
             if (userExist != null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "User already exists");
@@ -95,7 +97,7 @@ namespace EduPlay.WebAPI.Controllers
                 Surname = model.Surname,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 IsBanned = false,
-                UserName = model.Email
+                UserName = model.UserName
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -128,7 +130,8 @@ namespace EduPlay.WebAPI.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByEmailAsync(model.UserName) ??
+                await _userManager.FindByNameAsync(model.UserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userRoles = await _userManager.GetRolesAsync(user);

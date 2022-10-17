@@ -5,6 +5,7 @@ namespace EduPlay.WebAPI.Auth
 {
     public class RegisterModel
     {
+        public string UserName { get; set; }
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Surname is required")]
