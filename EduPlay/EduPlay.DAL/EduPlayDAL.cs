@@ -66,5 +66,29 @@ namespace EduPlay.DAL
         {
             return _dbContext.UserGameRecords.Where(x => x.UserId == userId).ToList();
         }
+
+        public void RemoveGame(Games game)
+        {
+            _dbContext.Remove(game);
+            _dbContext.SaveChangesAsync();
+        }
+
+        public void RemoveUserGameRecords(UserGameRecords gameRecord)
+        {
+            _dbContext.Remove(gameRecord);
+            _dbContext.SaveChangesAsync();
+        }
+
+        public void UpdateGame(Games game)
+        {
+            _dbContext.Update(game);
+            _dbContext.SaveChangesAsync();
+        }
+
+        public void UpdateUserGameRecords(UserGameRecords gameRecord)
+        {
+            _dbContext.Update(gameRecord);
+            _dbContext.SaveChangesAsync();
+        }
     }
 }

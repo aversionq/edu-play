@@ -8,9 +8,13 @@ namespace EduPlay.DAL.Interfaces
     public interface IEduPlayDAL
     {
         public void AddUserGameRecords(UserGameRecords gameRecord);
+        public void UpdateUserGameRecords(UserGameRecords gameRecord);
+        public void RemoveUserGameRecords(UserGameRecords gameRecord);
         public List<UserGameRecords> GetUserGameRecordsByUserId(string userId);
         public List<UserGameRecords> GetUserGameRecordsByGameId(Guid gameId);
         public List<Games> GetAllGames();
+        public void RemoveGame(Games game);
+        public void UpdateGame(Games game);
         public Games GetGameById(Guid gameId);
         public List<Games> GetGamesByThemeId(Guid themeId);
         public List<Games> GetGamesByDifficultyId(Guid difficultyId);

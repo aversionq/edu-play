@@ -8,4 +8,9 @@
     <ProjectReference Include="..\EduPlay.DAL\EduPlay.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
