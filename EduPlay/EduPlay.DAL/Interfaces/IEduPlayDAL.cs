@@ -21,5 +21,6 @@ namespace EduPlay.DAL.Interfaces
         public List<AspNetUsers> GetAllUsers();
         public AspNetUsers GetUserById(string userId);
         public AspNetUsers GetUserByEmail(string email);
+        public void UpdateUser(AspNetUsers user);
     }
 }

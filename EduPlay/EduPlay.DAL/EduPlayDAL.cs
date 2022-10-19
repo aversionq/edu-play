@@ -69,25 +69,30 @@ namespace EduPlay.DAL
 
         public void RemoveGame(Games game)
         {
-            _dbContext.Remove(game);
+            _dbContext.Games.Remove(game);
             _dbContext.SaveChangesAsync();
         }
 
         public void RemoveUserGameRecords(UserGameRecords gameRecord)
         {
-            _dbContext.Remove(gameRecord);
+            _dbContext.UserGameRecords.Remove(gameRecord);
             _dbContext.SaveChangesAsync();
         }
 
         public void UpdateGame(Games game)
         {
-            _dbContext.Update(game);
+            _dbContext.Games.Update(game);
             _dbContext.SaveChangesAsync();
+        }
+
+        public void UpdateUser(AspNetUsers user)
+        {
+            _dbContext.AspNetUsers.Update(user);
         }
 
         public void UpdateUserGameRecords(UserGameRecords gameRecord)
         {
-            _dbContext.Update(gameRecord);
+            _dbContext.UserGameRecords.Update(gameRecord);
             _dbContext.SaveChangesAsync();
         }
     }
