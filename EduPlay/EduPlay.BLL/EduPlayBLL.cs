@@ -24,67 +24,89 @@ namespace EduPlay.BLL
 
         public void AddUserGameRecord(UserGameRecordDTO gameRecordDTO)
         {
-            throw new NotImplementedException();
+            var gameRecord = _userGameRecordMapper.Map<UserGameRecordDTO, UserGameRecords>(gameRecordDTO);
+            _dal.AddUserGameRecords(gameRecord);
         }
 
         public List<GameDTO> GetAllGames()
         {
-            throw new NotImplementedException();
+            var games = _dal.GetAllGames();
+            List<GameDTO> gamesDto = _gameMapper.Map<List<Games>, List<GameDTO>>(games);
+            return gamesDto;
         }
 
         public List<UserDTO> GetAllUsers()
         {
-            throw new NotImplementedException();
+            var users = _dal.GetAllUsers();
+            var usersDto = _userMapper.Map<List<AspNetUsers>, List<UserDTO>>(users);
+            return usersDto;
         }
 
         public GameDTO GetGameById(Guid id)
         {
-            throw new NotImplementedException();
+            var game = _dal.GetGameById(id);
+            var gameDto = _gameMapper.Map<Games, GameDTO>(game);
+            return gameDto;
         }
 
         public List<GameDTO> GetGamesByDifficultyId(Guid id)
         {
-            throw new NotImplementedException();
+            var games = _dal.GetGamesByDifficultyId(id);
+            var gamesDto = _gameMapper.Map<List<Games>, List<GameDTO>>(games);
+            return gamesDto;
         }
 
         public List<GameDTO> GetGamesByThemeId(Guid id)
         {
-            throw new NotImplementedException();
+            var games = _dal.GetGamesByThemeId(id);
+            var gamesDto = _gameMapper.Map<List<Games>, List<GameDTO>>(games);
+            return gamesDto;
         }
 
         public UserDTO GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
+            var user = _dal.GetUserByEmail(email);
+            var userDto = _userMapper.Map<AspNetUsers, UserDTO>(user);
+            return userDto;
         }
 
         public UserDTO GetUserById(string id)
         {
-            throw new NotImplementedException();
+            var user = _dal.GetUserById(id);
+            var userDto = _userMapper.Map<AspNetUsers, UserDTO>(user);
+            return userDto;
         }
 
         public List<UserGameRecordDTO> GetUserGameRecordsByGameId(Guid id)
         {
-            throw new NotImplementedException();
+            var records = _dal.GetUserGameRecordsByGameId(id);
+            var recordsDto = _userGameRecordMapper.Map<List<UserGameRecords>, List<UserGameRecordDTO>>(records);
+            return recordsDto;
         }
 
         public List<UserGameRecordDTO> GetUserGameRecordsByUserId(string id)
         {
-            throw new NotImplementedException();
+            var users = _dal.GetUserGameRecordsByUserId(id);
+            var usersDto = _userGameRecordMapper.Map<List<UserGameRecords>, List<UserGameRecordDTO>>(users);
+            return usersDto;
         }
 
         public void RemoveGameRecordDTO(UserGameRecordDTO gameRecordDTO)
         {
-            throw new NotImplementedException();
+            var record = _userGameRecordMapper.Map<UserGameRecordDTO, UserGameRecords>(gameRecordDTO);
+            _dal.RemoveUserGameRecords(record);
         }
 
         public void UpdateUser(UserDTO user)
         {
-            throw new NotImplementedException();
+            var userEntity = _userMapper.Map<UserDTO, AspNetUsers>(user);
+            _dal.UpdateUser(userEntity);
         }
 
         public void UpdateUserGameRecord(UserGameRecordDTO newGameRecordDTO)
         {
-            throw new NotImplementedException();
+            var gameRecord = _userGameRecordMapper.Map<UserGameRecordDTO, UserGameRecords>(newGameRecordDTO);
+            _dal.UpdateUserGameRecords(gameRecord);
         }
 
         private void SetupMappers()

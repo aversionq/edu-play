@@ -5,12 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EduPlay.DAL\EduPlay.DAL.csproj" />
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\EduPlay.DAL\EduPlay.DAL.csproj" />
   </ItemGroup>
 
 </Project>
