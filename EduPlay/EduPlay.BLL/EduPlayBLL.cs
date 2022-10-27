@@ -9,7 +9,7 @@ using AutoMapper;
 
 namespace EduPlay.BLL
 {
-    internal class EduPlayBLL : IEduPlayBLL
+    public class EduPlayBLL : IEduPlayBLL
     {
         private IEduPlayDAL _dal;
         private Mapper _userMapper;

@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EduPlay.Dependencies;
 
 namespace EduPlay.WebAPI
 {
@@ -76,6 +77,7 @@ namespace EduPlay.WebAPI
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AuthDbContext>()
                 .AddDefaultTokenProviders();
+
 
             // JWT settings.
             services.AddAuthentication(options =>

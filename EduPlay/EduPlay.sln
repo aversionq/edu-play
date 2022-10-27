@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduPlay.WebAPI", "EduPlay.WebAPI\EduPlay.WebAPI.csproj", "{EE9327F9-E43E-4A16-9313-0CCC868F7853}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduPlay.WebAPI", "EduPlay.WebAPI\EduPlay.WebAPI.csproj", "{EE9327F9-E43E-4A16-9313-0CCC868F7853}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduPlay.BLL", "EduPlay.BLL\EduPlay.BLL.csproj", "{3E55D38A-0536-4C52-85B9-76A781AF828E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduPlay.BLL", "EduPlay.BLL\EduPlay.BLL.csproj", "{3E55D38A-0536-4C52-85B9-76A781AF828E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduPlay.DAL", "EduPlay.DAL\EduPlay.DAL.csproj", "{5AE2782A-53C4-4146-A256-3A6BB3873040}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EduPlay.DAL", "EduPlay.DAL\EduPlay.DAL.csproj", "{5AE2782A-53C4-4146-A256-3A6BB3873040}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduPlay.Dependencies", "EduPlau.Dependencies\EduPlay.Dependencies.csproj", "{FB488308-5172-4E84-B29E-ABAE6E634882}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{5AE2782A-53C4-4146-A256-3A6BB3873040}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AE2782A-53C4-4146-A256-3A6BB3873040}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AE2782A-53C4-4146-A256-3A6BB3873040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB488308-5172-4E84-B29E-ABAE6E634882}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB488308-5172-4E84-B29E-ABAE6E634882}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB488308-5172-4E84-B29E-ABAE6E634882}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB488308-5172-4E84-B29E-ABAE6E634882}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
