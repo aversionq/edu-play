@@ -6,6 +6,7 @@ using EduPlay.DAL.Entities;
 using EduPlay.BLL.Models;
 using EduPlay.BLL.Interfaces;
 using AutoMapper;
+using System.Threading.Tasks;
 
 namespace EduPlay.BLL
 {
@@ -22,15 +23,15 @@ namespace EduPlay.BLL
             SetupMappers();
         }
 
-        public void AddUserGameRecord(UserGameRecordDTO gameRecordDTO)
+        public async Task AddUserGameRecord(UserGameRecordDTO gameRecordDTO)
         {
             var gameRecord = _userGameRecordMapper.Map<UserGameRecordDTO, UserGameRecords>(gameRecordDTO);
-            _dal.AddUserGameRecords(gameRecord);
+            await _dal.AddUserGameRecords(gameRecord);
         }
 
-        public List<GameDTO> GetAllGames()
+        public async Task<List<GameDTO>> GetAllGames()
         {
-            var games = _dal.GetAllGames();
+            var games = await _dal.GetAllGames();
             List<GameDTO> gamesDto = _gameMapper.Map<List<Games>, List<GameDTO>>(games);
             return gamesDto;
         }
@@ -42,23 +43,23 @@ namespace EduPlay.BLL
             return usersDto;
         }
 
-        public GameDTO GetGameById(Guid id)
+        public async Task<GameDTO> GetGameById(Guid id)
         {
-            var game = _dal.GetGameById(id);
+            var game = await _dal.GetGameById(id);
             var gameDto = _gameMapper.Map<Games, GameDTO>(game);
             return gameDto;
         }
 
-        public List<GameDTO> GetGamesByDifficultyId(Guid id)
+        public async Task<List<GameDTO>> GetGamesByDifficultyId(Guid id)
         {
-            var games = _dal.GetGamesByDifficultyId(id);
+            var games = await _dal.GetGamesByDifficultyId(id);
             var gamesDto = _gameMapper.Map<List<Games>, List<GameDTO>>(games);
             return gamesDto;
         }
 
-        public List<GameDTO> GetGamesByThemeId(Guid id)
+        public async Task<List<GameDTO>> GetGamesByThemeId(Guid id)
         {
-            var games = _dal.GetGamesByThemeId(id);
+            var games = await _dal.GetGamesByThemeId(id);
             var gamesDto = _gameMapper.Map<List<Games>, List<GameDTO>>(games);
             return gamesDto;
         }
@@ -70,23 +71,23 @@ namespace EduPlay.BLL
             return userDto;
         }
 
-        public UserDTO GetUserById(string id)
+        public async Task<UserDTO> GetUserById(string id)
         {
-            var user = _dal.GetUserById(id);
+            var user = await _dal.GetUserById(id);
             var userDto = _userMapper.Map<AspNetUsers, UserDTO>(user);
             return userDto;
         }
 
-        public List<UserGameRecordDTO> GetUserGameRecordsByGameId(Guid id)
+        public async Task<List<UserGameRecordDTO>> GetUserGameRecordsByGameId(Guid id)
         {
-            var records = _dal.GetUserGameRecordsByGameId(id);
+            var records = await _dal.GetUserGameRecordsByGameId(id);
             var recordsDto = _userGameRecordMapper.Map<List<UserGameRecords>, List<UserGameRecordDTO>>(records);
             return recordsDto;
         }
 
-        public List<UserGameRecordDTO> GetUserGameRecordsByUserId(string id)
+        public async Task<List<UserGameRecordDTO>> GetUserGameRecordsByUserId(string id)
         {
-            var users = _dal.GetUserGameRecordsByUserId(id);
+            var users = await _dal.GetUserGameRecordsByUserId(id);
             var usersDto = _userGameRecordMapper.Map<List<UserGameRecords>, List<UserGameRecordDTO>>(users);
             return usersDto;
         }
@@ -97,16 +98,16 @@ namespace EduPlay.BLL
             _dal.RemoveUserGameRecords(record);
         }
 
-        public void UpdateUser(UserDTO user)
+        public async Task UpdateUser(UserDTO user)
         {
             var userEntity = _userMapper.Map<UserDTO, AspNetUsers>(user);
-            _dal.UpdateUser(userEntity);
+            await _dal.UpdateUser(userEntity);
         }
 
-        public void UpdateUserGameRecord(UserGameRecordDTO newGameRecordDTO)
+        public async Task UpdateUserGameRecord(UserGameRecordDTO newGameRecordDTO)
         {
             var gameRecord = _userGameRecordMapper.Map<UserGameRecordDTO, UserGameRecords>(newGameRecordDTO);
-            _dal.UpdateUserGameRecords(gameRecord);
+            await _dal.UpdateUserGameRecords(gameRecord);
         }
 
         private void SetupMappers()

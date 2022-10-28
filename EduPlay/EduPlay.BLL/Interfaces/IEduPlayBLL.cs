@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using EduPlay.BLL.Models;
 
 namespace EduPlay.BLL.Interfaces
 {
     public interface IEduPlayBLL
     {
-        public void AddUserGameRecord(UserGameRecordDTO gameRecordDTO);
-        public void UpdateUserGameRecord(UserGameRecordDTO newGameRecordDTO);
+        public Task AddUserGameRecord(UserGameRecordDTO gameRecordDTO);
+        public Task UpdateUserGameRecord(UserGameRecordDTO newGameRecordDTO);
         public void RemoveGameRecordDTO(UserGameRecordDTO gameRecordDTO);
-        public List<UserGameRecordDTO> GetUserGameRecordsByUserId(string id);
-        public List<UserGameRecordDTO> GetUserGameRecordsByGameId(Guid id);
-        public List<GameDTO> GetAllGames();
-        public List<GameDTO> GetGamesByThemeId(Guid id);
-        public List<GameDTO> GetGamesByDifficultyId(Guid id);
-        public GameDTO GetGameById(Guid id);
+        public Task<List<UserGameRecordDTO>> GetUserGameRecordsByUserId(string id);
+        public Task<List<UserGameRecordDTO>> GetUserGameRecordsByGameId(Guid id);
+        public Task<List<GameDTO>> GetAllGames();
+        public Task<List<GameDTO>> GetGamesByThemeId(Guid id);
+        public Task<List<GameDTO>> GetGamesByDifficultyId(Guid id);
+        public Task<GameDTO> GetGameById(Guid id);
         public List<UserDTO> GetAllUsers();
-        public UserDTO GetUserById(string id);
+        public Task<UserDTO> GetUserById(string id);
         public UserDTO GetUserByEmail(string email);
-        public void UpdateUser(UserDTO user);
+        public Task UpdateUser(UserDTO user);
     }
 }
