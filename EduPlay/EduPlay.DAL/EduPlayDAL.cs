@@ -4,6 +4,8 @@ using System.Text;
 using EduPlay.DAL.Interfaces;
 using EduPlay.DAL.Entities;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace EduPlay.DAL
 {
@@ -16,15 +18,15 @@ namespace EduPlay.DAL
             _dbContext = new EduPlayContext();
         }
 
-        public void AddUserGameRecords(UserGameRecords gameRecord)
+        public async Task AddUserGameRecords(UserGameRecords gameRecord)
         {
-            _dbContext.UserGameRecords.AddAsync(gameRecord);
-            _dbContext.SaveChangesAsync();
+            await _dbContext.UserGameRecords.AddAsync(gameRecord);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public List<Games> GetAllGames()
+        public async Task<List<Games>> GetAllGames()
         {
-            return _dbContext.Games.ToList();
+            return await _dbContext.Games.ToListAsync();
         }
 
         public List<AspNetUsers> GetAllUsers()
@@ -32,19 +34,19 @@ namespace EduPlay.DAL
             return _dbContext.AspNetUsers.ToList();
         }
 
-        public Games GetGameById(Guid gameId)
+        public async Task<Games> GetGameById(Guid gameId)
         {
-            return _dbContext.Games.Where(x => x.Id == gameId).FirstOrDefault();
+            return await _dbContext.Games.Where(x => x.Id == gameId).FirstOrDefaultAsync();
         }
 
-        public List<Games> GetGamesByDifficultyId(Guid difficultyId)
+        public async Task<List<Games>> GetGamesByDifficultyId(Guid difficultyId)
         {
-            return _dbContext.Games.Where(x => x.DifficultyId == difficultyId).ToList();
+            return await _dbContext.Games.Where(x => x.DifficultyId == difficultyId).ToListAsync();
         }
 
-        public List<Games> GetGamesByThemeId(Guid themeId)
+        public async Task<List<Games>> GetGamesByThemeId(Guid themeId)
         {
-            return _dbContext.Games.Where(x => x.ThemeId == themeId).ToList();
+            return await _dbContext.Games.Where(x => x.ThemeId == themeId).ToListAsync();
         }
 
         public AspNetUsers GetUserByEmail(string email)
@@ -52,19 +54,19 @@ namespace EduPlay.DAL
             return _dbContext.AspNetUsers.Where(x => x.Email == email).FirstOrDefault();
         }
 
-        public AspNetUsers GetUserById(string userId)
+        public async Task<AspNetUsers> GetUserById(string userId)
         {
-            return _dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefault();
+            return await _dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefaultAsync();
         }
 
-        public List<UserGameRecords> GetUserGameRecordsByGameId(Guid gameId)
+        public async Task<List<UserGameRecords>> GetUserGameRecordsByGameId(Guid gameId)
         {
-            return _dbContext.UserGameRecords.Where(x => x.GameId == gameId).ToList();
+            return await _dbContext.UserGameRecords.Where(x => x.GameId == gameId).ToListAsync();
         }
 
-        public List<UserGameRecords> GetUserGameRecordsByUserId(string userId)
+        public async Task<List<UserGameRecords>> GetUserGameRecordsByUserId(string userId)
         {
-            return _dbContext.UserGameRecords.Where(x => x.UserId == userId).ToList();
+            return await _dbContext.UserGameRecords.Where(x => x.UserId == userId).ToListAsync();
         }
 
         public void RemoveGame(Games game)
@@ -85,15 +87,16 @@ namespace EduPlay.DAL
             _dbContext.SaveChangesAsync();
         }
 
-        public void UpdateUser(AspNetUsers user)
+        public async Task UpdateUser(AspNetUsers user)
         {
             _dbContext.AspNetUsers.Update(user);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void UpdateUserGameRecords(UserGameRecords gameRecord)
+        public async Task UpdateUserGameRecords(UserGameRecords gameRecord)
         {
             _dbContext.UserGameRecords.Update(gameRecord);
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

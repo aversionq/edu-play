@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using EduPlay.DAL.Entities;
 
 namespace EduPlay.DAL.Interfaces
 {
     public interface IEduPlayDAL
     {
-        public void AddUserGameRecords(UserGameRecords gameRecord);
-        public void UpdateUserGameRecords(UserGameRecords gameRecord);
+        public Task AddUserGameRecords(UserGameRecords gameRecord);
+        public Task UpdateUserGameRecords(UserGameRecords gameRecord);
         public void RemoveUserGameRecords(UserGameRecords gameRecord);
-        public List<UserGameRecords> GetUserGameRecordsByUserId(string userId);
-        public List<UserGameRecords> GetUserGameRecordsByGameId(Guid gameId);
-        public List<Games> GetAllGames();
+        public Task<List<UserGameRecords>> GetUserGameRecordsByUserId(string userId);
+        public Task<List<UserGameRecords>> GetUserGameRecordsByGameId(Guid gameId);
+        public Task<List<Games>> GetAllGames();
         public void RemoveGame(Games game);
         public void UpdateGame(Games game);
-        public Games GetGameById(Guid gameId);
-        public List<Games> GetGamesByThemeId(Guid themeId);
-        public List<Games> GetGamesByDifficultyId(Guid difficultyId);
+        public Task<Games> GetGameById(Guid gameId);
+        public Task<List<Games>> GetGamesByThemeId(Guid themeId);
+        public Task<List<Games>> GetGamesByDifficultyId(Guid difficultyId);
         public List<AspNetUsers> GetAllUsers();
-        public AspNetUsers GetUserById(string userId);
+        public Task<AspNetUsers> GetUserById(string userId);
         public AspNetUsers GetUserByEmail(string email);
-        public void UpdateUser(AspNetUsers user);
+        public Task UpdateUser(AspNetUsers user);
     }
 }
