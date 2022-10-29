@@ -110,6 +110,11 @@ namespace EduPlay.BLL
             await _dal.UpdateUserGameRecords(gameRecord);
         }
 
+        public async Task UpdateUserProfilePicture(string userId, string picture)
+        {
+            await _dal.UpdateUserProfilePicture(userId, picture);
+        }
+
         private void SetupMappers()
         {
             var userMapperConfig = new MapperConfiguration(
