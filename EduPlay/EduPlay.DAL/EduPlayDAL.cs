@@ -16,6 +16,7 @@ namespace EduPlay.DAL
         public EduPlayDAL()
         {
             _dbContext = new EduPlayContext();
+            _dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         public async Task AddUserGameRecords(UserGameRecords gameRecord)
@@ -96,6 +97,13 @@ namespace EduPlay.DAL
         public async Task UpdateUserGameRecords(UserGameRecords gameRecord)
         {
             _dbContext.UserGameRecords.Update(gameRecord);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateUserProfilePicture(string userId, string picture)
+        {
+            var user = new AspNetUsers { Id = userId, ProfilePicture = picture };
+            _dbContext.AspNetUsers.Attach(user).Property(x => x.ProfilePicture).IsModified = true;
             await _dbContext.SaveChangesAsync();
         }
     }
