@@ -13,5 +13,6 @@ namespace EduPlay.WebAPI.Auth
         [Required]
         public DateTime DateOfBirth { get; set; }
         public bool IsBanned { get; set; } = false;
+        public string ProfilePicture { get; set; }
     }
 }

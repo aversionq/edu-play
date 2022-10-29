@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EduPlay.WebAPI.Controllers
 {
@@ -21,12 +22,14 @@ namespace EduPlay.WebAPI.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AuthController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpPost]
@@ -48,7 +51,8 @@ namespace EduPlay.WebAPI.Controllers
                 Surname = model.Surname,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 IsBanned = false,
-                UserName = model.UserName
+                UserName = model.UserName,
+                ProfilePicture = _webHostEnvironment.WebRootPath + @"\eduplay_default.jpg"
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -97,7 +101,8 @@ namespace EduPlay.WebAPI.Controllers
                 Surname = model.Surname,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 IsBanned = false,
-                UserName = model.UserName
+                UserName = model.UserName,
+                ProfilePicture = _webHostEnvironment.WebRootPath + @"\eduplay_default.jpg"
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
