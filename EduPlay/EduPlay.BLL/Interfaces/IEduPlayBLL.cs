@@ -22,5 +22,7 @@ namespace EduPlay.BLL.Interfaces
         public UserDTO GetUserByEmail(string email);
         public Task UpdateUser(UserDTO user);
         public Task UpdateUserProfilePicture(string userId, string picture);
+        public Task UpdateUserUserName(string userId, string userName);
+        //public Task<UserDTO> GetUserByUserName(string userName);
     }
 }

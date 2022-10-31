@@ -39,10 +39,17 @@ namespace EduPlay.WebAPI.Controllers
         [Route("getCurrentUser")]
         public async Task<UserDTO> GetCurrentUser()
         {
-            ClaimsPrincipal currentUser = this.User;
-            var currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var currentUserId = GetCurrentUserId();
             var currentUserDTO = await _bll.GetUserById(currentUserId);
             return currentUserDTO;
+        }
+
+        [HttpGet]
+        [Route("getCurrentUserId")]
+        public string GetCurrentUserId()
+        {
+            ClaimsPrincipal currentUser = this.User;
+            return currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
 
         [HttpPut]
@@ -85,6 +92,22 @@ namespace EduPlay.WebAPI.Controllers
             catch (Exception ex)
             {
                 return ex.Message;
+            }
+        }
+
+        [HttpPut]
+        [Route("updateUserUserName")]
+        public async Task<ActionResult> UpdateUserUserName(string userName)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                await _bll.UpdateUserUserName(userId, userName);
+                return Ok($"Username for user {userId} updated");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Some error happened while updating username.");
             }
         }
     }

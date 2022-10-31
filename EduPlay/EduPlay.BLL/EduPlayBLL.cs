@@ -78,6 +78,11 @@ namespace EduPlay.BLL
             return userDto;
         }
 
+        //public Task<UserDTO> GetUserByUserName(string userName)
+        //{
+        //    _dal.
+        //}
+
         public async Task<List<UserGameRecordDTO>> GetUserGameRecordsByGameId(Guid id)
         {
             var records = await _dal.GetUserGameRecordsByGameId(id);
@@ -113,6 +118,18 @@ namespace EduPlay.BLL
         public async Task UpdateUserProfilePicture(string userId, string picture)
         {
             await _dal.UpdateUserProfilePicture(userId, picture);
+        }
+
+        public async Task UpdateUserUserName(string userId, string userName)
+        {
+            if (_dal.GetUserByUserName(userName).Result == null)
+            {
+                await _dal.UpdateUserUserName(userId, userName);
+            }
+            else
+            {
+                throw new Exception("This username is already taken.");
+            }
         }
 
         private void SetupMappers()

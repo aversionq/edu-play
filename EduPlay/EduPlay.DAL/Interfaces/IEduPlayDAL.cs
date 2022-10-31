@@ -24,5 +24,7 @@ namespace EduPlay.DAL.Interfaces
         public AspNetUsers GetUserByEmail(string email);
         public Task UpdateUser(AspNetUsers user);
         public Task UpdateUserProfilePicture(string userId, string picture);
+        public Task UpdateUserUserName(string userId, string userName);
+        public Task<AspNetUsers> GetUserByUserName(string userName);
     }
 }

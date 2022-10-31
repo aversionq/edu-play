@@ -60,6 +60,11 @@ namespace EduPlay.DAL
             return await _dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefaultAsync();
         }
 
+        public async Task<AspNetUsers> GetUserByUserName(string userName)
+        {
+            return await _dbContext.AspNetUsers.Where(x => x.UserName == userName).FirstOrDefaultAsync();
+        }
+
         public async Task<List<UserGameRecords>> GetUserGameRecordsByGameId(Guid gameId)
         {
             return await _dbContext.UserGameRecords.Where(x => x.GameId == gameId).ToListAsync();
@@ -104,6 +109,18 @@ namespace EduPlay.DAL
         {
             var user = new AspNetUsers { Id = userId, ProfilePicture = picture };
             _dbContext.AspNetUsers.Attach(user).Property(x => x.ProfilePicture).IsModified = true;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateUserUserName(string userId, string userName)
+        {
+            var user = new AspNetUsers 
+            { 
+                Id = userId, 
+                UserName = userName
+                // NormalizedUserName = userName.ToUpper() 
+            };
+            _dbContext.AspNetUsers.Attach(user).Property(x => x.UserName).IsModified = true;
             await _dbContext.SaveChangesAsync();
         }
     }
