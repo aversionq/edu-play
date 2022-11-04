@@ -118,32 +118,40 @@ namespace EduPlay.WebAPI.Controllers
 
         [HttpPut]
         [Route("updateUserPassword")]
-        public async Task<ActionResult> UpdateUserPassword(string newPassword)
+        public async Task<ActionResult> UpdateUserPassword(string oldPassword, string newPassword)
         {
             var user = await _userManager.FindByIdAsync(GetCurrentUserId());
             if (user != null)
             {
-                var _passwordValidator = HttpContext.RequestServices.GetService(typeof
-                    (IPasswordValidator<ApplicationUser>)) as IPasswordValidator<ApplicationUser>;
-                var isPasswordValid = await _passwordValidator.ValidateAsync(_userManager, user, newPassword);
-                if (isPasswordValid.Succeeded)
+                if (await _userManager.CheckPasswordAsync(user, oldPassword))
                 {
-                    var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
-                    if (result.Succeeded)
+                    var _passwordValidator = HttpContext.RequestServices.GetService(typeof
+                        (IPasswordValidator<ApplicationUser>)) as IPasswordValidator<ApplicationUser>;
+                    var isPasswordValid = await _passwordValidator.ValidateAsync(_userManager, user, newPassword);
+                    if (isPasswordValid.Succeeded)
                     {
-                        return Ok("User password updated successfully");
+                        var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+                        var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+                        if (result.Succeeded)
+                        {
+                            return Ok("User password updated successfully");
+                        }
+                        else
+                        {
+                            return StatusCode(StatusCodes.Status500InternalServerError,
+                                "Unexpected error happened while updating password");
+                        }
                     }
                     else
                     {
                         return StatusCode(StatusCodes.Status500InternalServerError,
-                            "Unexpected error happened while updating password");
+                            "Password rules have been violated");
                     }
                 }
                 else
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError,
-                        "Password rules have been violated");
+                            "Wrong old password");
                 }
             }
             else
