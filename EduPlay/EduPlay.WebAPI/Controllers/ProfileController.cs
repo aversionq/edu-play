@@ -85,7 +85,7 @@ namespace EduPlay.WebAPI.Controllers
                         await pfp.files.CopyToAsync(fileStream);
                         await _bll.UpdateUserProfilePicture(currentUserId, picturePath);
                         fileStream.Flush();
-                        return $"{currentUserId} Profile picture uploaded";
+                        return $"User profile picture uploaded";
                     }
                 }
                 else
@@ -107,7 +107,7 @@ namespace EduPlay.WebAPI.Controllers
             {
                 var userId = GetCurrentUserId();
                 await _bll.UpdateUserUserName(userId, userName);
-                return Ok($"Username for user {userId} updated");
+                return Ok($"Username updated");
             }
             catch (Exception)
             {
