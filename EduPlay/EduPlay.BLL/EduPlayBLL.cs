@@ -16,6 +16,8 @@ namespace EduPlay.BLL
         private Mapper _userMapper;
         private Mapper _gameMapper;
         private Mapper _userGameRecordMapper;
+        private Mapper _themeMapper;
+        private Mapper _difficultyMapper;
 
         public EduPlayBLL(IEduPlayDAL dal)
         {
@@ -29,6 +31,13 @@ namespace EduPlay.BLL
             await _dal.AddUserGameRecords(gameRecord);
         }
 
+        public async Task<List<DifficultyDTO>> GetAllDifficulties()
+        {
+            var difficulties = await _dal.GetAllDifficulties();
+            var difficultiesDTO = _difficultyMapper.Map<List<Difficulties>, List<DifficultyDTO>>(difficulties);
+            return difficultiesDTO;
+        }
+
         public async Task<List<GameDTO>> GetAllGames()
         {
             var games = await _dal.GetAllGames();
@@ -36,11 +45,32 @@ namespace EduPlay.BLL
             return gamesDto;
         }
 
+        public async Task<List<ThemeDTO>> GetAllThemes()
+        {
+            var themes = await _dal.GetAllThemes();
+            var themesDTO = _themeMapper.Map<List<Themes>, List<ThemeDTO>>(themes);
+            return themesDTO;
+        }
+
         public List<UserDTO> GetAllUsers()
         {
             var users = _dal.GetAllUsers();
             var usersDto = _userMapper.Map<List<AspNetUsers>, List<UserDTO>>(users);
             return usersDto;
+        }
+
+        public async Task<DifficultyDTO> GetDifficultyById(Guid id)
+        {
+            var difficulty = await _dal.GetDifficultyById(id);
+            var difficultyDTO = _difficultyMapper.Map<Difficulties, DifficultyDTO>(difficulty);
+            return difficultyDTO;
+        }
+
+        public async Task<DifficultyDTO> GetDifficultyByValue(int value)
+        {
+            var difficulty = await _dal.GetDifficultyByValue(value);
+            var difficultyDTO = _difficultyMapper.Map<Difficulties, DifficultyDTO>(difficulty);
+            return difficultyDTO;
         }
 
         public async Task<GameDTO> GetGameById(Guid id)
@@ -62,6 +92,20 @@ namespace EduPlay.BLL
             var games = await _dal.GetGamesByThemeId(id);
             var gamesDto = _gameMapper.Map<List<Games>, List<GameDTO>>(games);
             return gamesDto;
+        }
+
+        public async Task<ThemeDTO> GetThemeById(Guid id)
+        {
+            var theme = await _dal.GetThemeById(id);
+            var themeDTO = _themeMapper.Map<Themes, ThemeDTO>(theme);
+            return themeDTO;
+        }
+
+        public async Task<ThemeDTO> GetThemeByName(string name)
+        {
+            var theme = await _dal.GetThemeByName(name);
+            var themeDTO = _themeMapper.Map<Themes, ThemeDTO>(theme);
+            return themeDTO;
         }
 
         public UserDTO GetUserByEmail(string email)
@@ -148,6 +192,16 @@ namespace EduPlay.BLL
                 cfg => cfg.CreateMap<UserGameRecordDTO, UserGameRecords>().ReverseMap()
             );
             _userGameRecordMapper = new Mapper(userGameRecordConfig);
+
+            var themeConfig = new MapperConfiguration(
+                cfg => cfg.CreateMap<ThemeDTO, Themes>().ReverseMap()
+            );
+            _themeMapper = new Mapper(themeConfig);
+
+            var difficultyConfig = new MapperConfiguration(
+                cfg => cfg.CreateMap<DifficultyDTO, Difficulties>().ReverseMap()
+            );
+            _difficultyMapper = new Mapper(difficultyConfig);
         }
     }
 }

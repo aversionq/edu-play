@@ -24,5 +24,11 @@ namespace EduPlay.BLL.Interfaces
         public Task UpdateUserProfilePicture(string userId, string picture);
         public Task UpdateUserUserName(string userId, string userName);
         //public Task<UserDTO> GetUserByUserName(string userName);
+        public Task<List<ThemeDTO>> GetAllThemes();
+        public Task<List<DifficultyDTO>> GetAllDifficulties();
+        public Task<ThemeDTO> GetThemeById(Guid id);
+        public Task<DifficultyDTO> GetDifficultyById(Guid id);
+        public Task<ThemeDTO> GetThemeByName(string name);
+        public Task<DifficultyDTO> GetDifficultyByValue(int value);
     }
 }
