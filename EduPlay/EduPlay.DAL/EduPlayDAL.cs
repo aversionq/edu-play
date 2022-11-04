@@ -25,14 +25,34 @@ namespace EduPlay.DAL
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<List<Difficulties>> GetAllDifficulties()
+        {
+            return await _dbContext.Difficulties.ToListAsync();
+        }
+
         public async Task<List<Games>> GetAllGames()
         {
             return await _dbContext.Games.ToListAsync();
         }
 
+        public async Task<List<Themes>> GetAllThemes()
+        {
+            return await _dbContext.Themes.ToListAsync();
+        }
+
         public List<AspNetUsers> GetAllUsers()
         {
             return _dbContext.AspNetUsers.ToList();
+        }
+
+        public async Task<Difficulties> GetDifficultyById(Guid id)
+        {
+            return await _dbContext.Difficulties.Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<Difficulties> GetDifficultyByValue(int value)
+        {
+            return await _dbContext.Difficulties.Where(x => x.Value == value).FirstOrDefaultAsync();
         }
 
         public async Task<Games> GetGameById(Guid gameId)
@@ -48,6 +68,17 @@ namespace EduPlay.DAL
         public async Task<List<Games>> GetGamesByThemeId(Guid themeId)
         {
             return await _dbContext.Games.Where(x => x.ThemeId == themeId).ToListAsync();
+        }
+
+        public async Task<Themes> GetThemeById(Guid id)
+        {
+            return await _dbContext.Themes.Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<Themes> GetThemeByName(string name)
+        {
+            return await _dbContext.Themes.Where(x => x.Name.ToUpper() == name.ToUpper())
+                .FirstOrDefaultAsync();
         }
 
         public AspNetUsers GetUserByEmail(string email)

@@ -26,5 +26,11 @@ namespace EduPlay.DAL.Interfaces
         public Task UpdateUserProfilePicture(string userId, string picture);
         public Task UpdateUserUserName(string userId, string userName);
         public Task<AspNetUsers> GetUserByUserName(string userName);
+        public Task<List<Themes>> GetAllThemes();
+        public Task<Themes> GetThemeById(Guid id);
+        public Task<List<Difficulties>> GetAllDifficulties();
+        public Task<Difficulties> GetDifficultyById(Guid id);
+        public Task<Themes> GetThemeByName(string name);
+        public Task<Difficulties> GetDifficultyByValue(int value);
     }
 }
