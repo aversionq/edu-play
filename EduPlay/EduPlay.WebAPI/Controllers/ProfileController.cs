@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System;
+using EduPlay.WebAPI.Auth;
 
 namespace EduPlay.WebAPI.Controllers
 {
@@ -21,11 +22,14 @@ namespace EduPlay.WebAPI.Controllers
     {
         private readonly IEduPlayBLL _bll;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProfileController(IWebHostEnvironment webHostEnvironment)
+        public ProfileController(IWebHostEnvironment webHostEnvironment, 
+            UserManager<ApplicationUser> userManager)
         {
             _webHostEnvironment = webHostEnvironment;
             _bll = DependencyResolver.Instance.EduPlayBLL;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -81,12 +85,12 @@ namespace EduPlay.WebAPI.Controllers
                         await pfp.files.CopyToAsync(fileStream);
                         await _bll.UpdateUserProfilePicture(currentUserId, picturePath);
                         fileStream.Flush();
-                        return $"{currentUserId} Profile picture uploaded.";
+                        return $"{currentUserId} Profile picture uploaded";
                     }
                 }
                 else
                 {
-                    return "Failed to upload profile picture.";
+                    return "Failed to upload profile picture";
                 }
             }
             catch (Exception ex)
@@ -107,7 +111,44 @@ namespace EduPlay.WebAPI.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Some error happened while updating username.");
+                return StatusCode(StatusCodes.Status500InternalServerError, 
+                    "Some error happened while updating username");
+            }
+        }
+
+        [HttpPut]
+        [Route("updateUserPassword")]
+        public async Task<ActionResult> UpdateUserPassword(string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(GetCurrentUserId());
+            if (user != null)
+            {
+                var _passwordValidator = HttpContext.RequestServices.GetService(typeof
+                    (IPasswordValidator<ApplicationUser>)) as IPasswordValidator<ApplicationUser>;
+                var isPasswordValid = await _passwordValidator.ValidateAsync(_userManager, user, newPassword);
+                if (isPasswordValid.Succeeded)
+                {
+                    var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+                    if (result.Succeeded)
+                    {
+                        return Ok("User password updated successfully");
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError,
+                            "Unexpected error happened while updating password");
+                    }
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                        "Password rules have been violated");
+                }
+            }
+            else
+            {
+                return BadRequest("User not found");
             }
         }
     }
