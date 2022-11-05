@@ -148,10 +148,14 @@ namespace EduPlay.DAL
             var user = new AspNetUsers 
             { 
                 Id = userId, 
-                UserName = userName
-                // NormalizedUserName = userName.ToUpper() 
+                UserName = userName,
+                NormalizedUserName = userName.ToUpper()
             };
-            _dbContext.AspNetUsers.Attach(user).Property(x => x.UserName).IsModified = true;
+
+            _dbContext.AspNetUsers.Attach(user);
+            _dbContext.Entry(user).Property(x => x.UserName).IsModified = true;
+            _dbContext.Entry(user).Property(x => x.NormalizedUserName).IsModified = true;
+
             await _dbContext.SaveChangesAsync();
         }
     }
