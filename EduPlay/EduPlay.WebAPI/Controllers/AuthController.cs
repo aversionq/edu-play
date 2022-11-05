@@ -12,6 +12,11 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.WebUtilities;
+using MimeKit;
+using MimeKit.Text;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 
 namespace EduPlay.WebAPI.Controllers
 {
@@ -168,6 +173,75 @@ namespace EduPlay.WebAPI.Controllers
             }
 
             return Unauthorized();
+        }
+
+        [HttpPost]
+        [Route("forgetPassword")]
+        public async Task<ActionResult> ForgetPassword([FromBody] ForgetPasswordModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var encodedToken = Encoding.UTF8.GetBytes(token);
+                var validToken = WebEncoders.Base64UrlEncode(encodedToken);
+
+                var url = $"{_configuration["AppUrl"]}/ResetPassword?email={model.Email}&token={validToken}";
+
+                var email = new MimeMessage();
+                email.From.Add(MailboxAddress.Parse("nadia.kutch@ethereal.email"));
+                email.To.Add(MailboxAddress.Parse(model.Email));
+                email.Subject = $"EduPlay password reset";
+                email.Body = new TextPart(TextFormat.Html) 
+                { 
+                    Text = $"<h1>You requested a password recovery!</h1>" +
+                    $"<p>Link to recover your password: {url}</p>"
+                };
+
+                using var smtp = new SmtpClient();
+                await smtp.ConnectAsync("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync("nadia.kutch@ethereal.email", "7UVk9fgRCDRMchnmgA");
+                await smtp.SendAsync(email);
+                await smtp.DisconnectAsync(true);
+
+                return Ok($"Email with recovery link sent to {model.Email}");
+            }
+            else
+            {
+                return BadRequest("User not found");
+            }
+        }
+
+        [HttpPut]
+        [Route("resetPassword")]
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                var decodedToken = WebEncoders.Base64UrlDecode(model.ResetToken);
+                var decoder = Encoding.UTF8.GetDecoder();
+
+                char[] chars;
+                int charCount = decoder.GetCharCount(decodedToken, 0, decodedToken.Length);
+                chars = new Char[charCount];
+                int charsDecodedCount = decoder.GetChars(decodedToken, 0, decodedToken.Length, chars, 0);
+                var validToken = new string(chars);
+
+                var result = await _userManager.ResetPasswordAsync(user, validToken, model.Password);
+                if (result.Succeeded)
+                {
+                    return Ok("Password has been reset successfully");
+                }
+                else
+                {
+                    return BadRequest("An unexpected error happened while reseting password");
+                }
+            }
+            else
+            {
+                return BadRequest("User not found");
+            }
         }
     }
 }

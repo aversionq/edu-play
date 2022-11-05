@@ -122,11 +122,6 @@ namespace EduPlay.BLL
             return userDto;
         }
 
-        //public Task<UserDTO> GetUserByUserName(string userName)
-        //{
-        //    _dal.
-        //}
-
         public async Task<List<UserGameRecordDTO>> GetUserGameRecordsByGameId(Guid id)
         {
             var records = await _dal.GetUserGameRecordsByGameId(id);
