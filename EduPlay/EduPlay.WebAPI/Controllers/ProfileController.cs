@@ -40,6 +40,20 @@ namespace EduPlay.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("getUserPassedGames")]
+        public async Task<List<GameDTO>> GetUserPassedGames(string userId)
+        {
+            return await _bll.GetUserPassedGames(userId);
+        }
+
+        [HttpGet]
+        [Route("getUserBestResult")]
+        public async Task<GameDTO> GetUserBestResult(string userId)
+        {
+            return await _bll.GetUserBestResult(userId);
+        }
+
+        [HttpGet]
         [Route("getCurrentUser")]
         public async Task<UserDTO> GetCurrentUser()
         {

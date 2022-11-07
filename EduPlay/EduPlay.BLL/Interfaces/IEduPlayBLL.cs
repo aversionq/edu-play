@@ -30,5 +30,7 @@ namespace EduPlay.BLL.Interfaces
         public Task<DifficultyDTO> GetDifficultyById(Guid id);
         public Task<ThemeDTO> GetThemeByName(string name);
         public Task<DifficultyDTO> GetDifficultyByValue(int value);
+        public Task<List<GameDTO>> GetUserPassedGames(string userId);
+        public Task<GameDTO> GetUserBestResult(string userId);
     }
 }

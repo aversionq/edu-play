@@ -7,6 +7,7 @@ using EduPlay.BLL.Models;
 using EduPlay.BLL.Interfaces;
 using AutoMapper;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace EduPlay.BLL
 {
@@ -108,6 +109,15 @@ namespace EduPlay.BLL
             return themeDTO;
         }
 
+        public async Task<GameDTO> GetUserBestResult(string userId)
+        {
+            var userRecords = await _dal.GetUserGameRecordsByUserId(userId);
+            var bestResult = userRecords.OrderByDescending(x => x.Score).FirstOrDefault();
+            var game = await _dal.GetGameById(bestResult.GameId);
+            var gameDTO = _gameMapper.Map<Games, GameDTO>(game);
+            return gameDTO;
+        }
+
         public UserDTO GetUserByEmail(string email)
         {
             var user = _dal.GetUserByEmail(email);
@@ -134,6 +144,23 @@ namespace EduPlay.BLL
             var users = await _dal.GetUserGameRecordsByUserId(id);
             var usersDto = _userGameRecordMapper.Map<List<UserGameRecords>, List<UserGameRecordDTO>>(users);
             return usersDto;
+        }
+
+        public async Task<List<GameDTO>> GetUserPassedGames(string userId)
+        {
+            var passedGames = new List<GameDTO>();
+            var userRecords = await _dal.GetUserGameRecordsByUserId(userId);
+            foreach (var record in userRecords)
+            {
+                var game = await _dal.GetGameById(record.GameId);
+                if (record.Score == game.MaxScore)
+                {
+                    var gameDTO = _gameMapper.Map<Games, GameDTO>(game);
+                    passedGames.Add(gameDTO);
+                }
+            }
+
+            return passedGames;
         }
 
         public void RemoveGameRecordDTO(UserGameRecordDTO gameRecordDTO)
