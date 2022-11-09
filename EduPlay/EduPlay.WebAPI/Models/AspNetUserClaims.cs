@@ -5,17 +5,15 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace EduPlay.DAL.Entities
+namespace EduPlay.WebAPI.Models
 {
-    public partial class UserGameRecords
+    public partial class AspNetUserClaims
     {
-        public Guid Id { get; set; }
-        public Guid GameId { get; set; }
-        public int Score { get; set; }
+        public int Id { get; set; }
         public string UserId { get; set; }
-        public int TimesPlayed { get; set; }
+        public string ClaimType { get; set; }
+        public string ClaimValue { get; set; }
 
-        public virtual Games Game { get; set; }
         public virtual AspNetUsers User { get; set; }
     }
 }

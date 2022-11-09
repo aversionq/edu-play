@@ -10,5 +10,6 @@ namespace EduPlay.BLL.Models
         public Guid GameId { get; set; }
         public int Score { get; set; }
         public string UserId { get; set; }
+        public int TimesPlayed { get; set; }
     }
 }
