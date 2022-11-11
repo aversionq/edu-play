@@ -13,7 +13,7 @@ namespace EduPlay.DAL.Entities
         public Guid GameId { get; set; }
         public int Score { get; set; }
         public string UserId { get; set; }
-        public int TimesPlayed { get; set; }
+        public int TimesPlayed { get; set; } = 0;
 
         public virtual Games Game { get; set; }
         public virtual AspNetUsers User { get; set; }

@@ -106,6 +106,12 @@ namespace EduPlay.DAL
             return await _dbContext.UserGameRecords.Where(x => x.UserId == userId).ToListAsync();
         }
 
+        public async Task<UserGameRecords> GetUserGameRecordsByUserIdAndGameId(string userId, Guid gameId)
+        {
+            return await _dbContext.UserGameRecords.Where(
+                x => x.UserId == userId && x.GameId == gameId).FirstOrDefaultAsync();
+        }
+
         public void RemoveGame(Games game)
         {
             _dbContext.Games.Remove(game);
@@ -124,16 +130,46 @@ namespace EduPlay.DAL
             _dbContext.SaveChangesAsync();
         }
 
+        public async Task UpdateTimesPlayed(Guid recordId, int amount)
+        {
+            var record = new UserGameRecords
+            {
+                Id = recordId,
+                TimesPlayed = amount
+            };
+            _dbContext.UserGameRecords.Attach(record).Property(x => x.TimesPlayed).IsModified = true;
+            await _dbContext.SaveChangesAsync();
+            _dbContext.Entry(record).State = EntityState.Detached;
+        }
+
+        //public async Task UpdateTimesPlayed(string userId, Guid gameId, int amount)
+        //{
+        //    var record = new UserGameRecords
+        //    {
+        //        UserId = userId,
+        //        GameId = gameId,
+        //        TimesPlayed = amount
+        //    };
+        //    _dbContext.UserGameRecords.Attach(record).Property(x => x.TimesPlayed).IsModified = true;
+        //    await _dbContext.SaveChangesAsync();
+        //}
+
         public async Task UpdateUser(AspNetUsers user)
         {
             _dbContext.AspNetUsers.Update(user);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateUserGameRecords(UserGameRecords gameRecord)
+        public async Task UpdateUserGameRecords(Guid recordId, int newScore)
         {
-            _dbContext.UserGameRecords.Update(gameRecord);
+            var record = new UserGameRecords
+            {
+                Id = recordId,
+                Score = newScore
+            };
+            _dbContext.UserGameRecords.Attach(record).Property(x => x.Score).IsModified = true;
             await _dbContext.SaveChangesAsync();
+            _dbContext.Entry(record).State = EntityState.Detached;
         }
 
         public async Task UpdateUserProfilePicture(string userId, string picture)
@@ -141,6 +177,7 @@ namespace EduPlay.DAL
             var user = new AspNetUsers { Id = userId, ProfilePicture = picture };
             _dbContext.AspNetUsers.Attach(user).Property(x => x.ProfilePicture).IsModified = true;
             await _dbContext.SaveChangesAsync();
+            _dbContext.Entry(user).State = EntityState.Detached;
         }
 
         public async Task UpdateUserUserName(string userId, string userName)
@@ -155,8 +192,8 @@ namespace EduPlay.DAL
             _dbContext.AspNetUsers.Attach(user);
             _dbContext.Entry(user).Property(x => x.UserName).IsModified = true;
             _dbContext.Entry(user).Property(x => x.NormalizedUserName).IsModified = true;
-
             await _dbContext.SaveChangesAsync();
+            _dbContext.Entry(user).State = EntityState.Detached;
         }
     }
 }

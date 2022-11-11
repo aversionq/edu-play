@@ -9,7 +9,7 @@ namespace EduPlay.DAL.Interfaces
     public interface IEduPlayDAL
     {
         public Task AddUserGameRecords(UserGameRecords gameRecord);
-        public Task UpdateUserGameRecords(UserGameRecords gameRecord);
+        public Task UpdateUserGameRecords(Guid recordId, int newScore);
         public void RemoveUserGameRecords(UserGameRecords gameRecord);
         public Task<List<UserGameRecords>> GetUserGameRecordsByUserId(string userId);
         public Task<List<UserGameRecords>> GetUserGameRecordsByGameId(Guid gameId);
@@ -32,5 +32,7 @@ namespace EduPlay.DAL.Interfaces
         public Task<Difficulties> GetDifficultyById(Guid id);
         public Task<Themes> GetThemeByName(string name);
         public Task<Difficulties> GetDifficultyByValue(int value);
+        public Task UpdateTimesPlayed(Guid recordId, int amount);
+        public Task<UserGameRecords> GetUserGameRecordsByUserIdAndGameId(string userId, Guid gameId);
     }
 }

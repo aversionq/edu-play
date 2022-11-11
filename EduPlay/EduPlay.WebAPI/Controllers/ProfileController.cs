@@ -48,9 +48,16 @@ namespace EduPlay.WebAPI.Controllers
 
         [HttpGet]
         [Route("getUserBestResult")]
-        public async Task<GameDTO> GetUserBestResult(string userId)
+        public async Task<ActionResult<GameDTO>> GetUserBestResult(string userId)
         {
-            return await _bll.GetUserBestResult(userId);
+            try
+            {
+                return await _bll.GetUserBestResult(userId);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Some error happened while trying to get user's best result");
+            }
         }
 
         [HttpGet]

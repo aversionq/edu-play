@@ -169,16 +169,31 @@ namespace EduPlay.BLL
             _dal.RemoveUserGameRecords(record);
         }
 
+        public async Task UpdateTimesPlayed(string userId, Guid gameId)
+        {
+            var record = await _dal.GetUserGameRecordsByUserIdAndGameId(userId, gameId);
+            if (record == null)
+            {
+                throw new Exception("User record not found.");
+            }
+            var newTimesPlayed = record.TimesPlayed + 1;
+            await _dal.UpdateTimesPlayed(record.Id, newTimesPlayed);
+        }
+
         public async Task UpdateUser(UserDTO user)
         {
             var userEntity = _userMapper.Map<UserDTO, AspNetUsers>(user);
             await _dal.UpdateUser(userEntity);
         }
 
-        public async Task UpdateUserGameRecord(UserGameRecordDTO newGameRecordDTO)
+        public async Task UpdateUserGameRecord(string userId, Guid gameId, int newScore)
         {
-            var gameRecord = _userGameRecordMapper.Map<UserGameRecordDTO, UserGameRecords>(newGameRecordDTO);
-            await _dal.UpdateUserGameRecords(gameRecord);
+            var record = await _dal.GetUserGameRecordsByUserIdAndGameId(userId, gameId);
+            if (record == null)
+            {
+                throw new Exception("User record not found.");
+            }
+            await _dal.UpdateUserGameRecords(record.Id, newScore);
         }
 
         public async Task UpdateUserProfilePicture(string userId, string picture)

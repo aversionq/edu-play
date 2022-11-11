@@ -52,10 +52,17 @@ namespace EduPlay.WebAPI.Controllers
 
         [HttpPut]
         [Route("updateUserGameRecord")]
-        public async Task<ActionResult> UpdateUserGameRecord(UserGameRecordDTO record)
+        public async Task<ActionResult> UpdateUserGameRecord(string userId, Guid gameId, int newScore)
         {
-            await _bll.UpdateUserGameRecord(record);
-            return Ok(record);
+            //try
+            //{
+                await _bll.UpdateUserGameRecord(userId, gameId, newScore);
+                return Ok();
+            //}
+            //catch (Exception)
+            //{
+            //    return BadRequest("Some error happened while updating user's score");
+            //}
         }
 
         [HttpGet]
@@ -98,6 +105,43 @@ namespace EduPlay.WebAPI.Controllers
         public async Task<DifficultyDTO> GetDifficultyByValue(int value)
         {
             return await _bll.GetDifficultyByValue(value);
+        }
+
+        [HttpPut]
+        [Route("UpdateTimesPlayed")]
+        public async Task<ActionResult> UpdateTimesPlayed(string userId, Guid gameId)
+        {
+            try
+            {
+                await _bll.UpdateTimesPlayed(userId, gameId);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Some error happened while updating times played parameter");
+            }
+        }
+
+        [HttpPost]
+        [Route("AddUserGameRecord")]
+        public async Task<ActionResult> AddUserGameRecord(UserGameRecordDTO record)
+        {
+            try
+            {
+                await _bll.AddUserGameRecord(record);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Some error happened while adding new game record for user");
+            }
+        }
+
+        [HttpGet]
+        [Route("GenerateGuid")]
+        public ActionResult<Guid> GenerateGuid()
+        {
+            return Ok(Guid.NewGuid());
         }
     }
 }
