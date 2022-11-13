@@ -26,11 +26,11 @@ namespace EduPlay.BLL
             SetupMappers();
         }
 
-        public async Task AddUserGameRecord(UserGameRecordDTO gameRecordDTO)
-        {
-            var gameRecord = _userGameRecordMapper.Map<UserGameRecordDTO, UserGameRecords>(gameRecordDTO);
-            await _dal.AddUserGameRecords(gameRecord);
-        }
+        //public async Task AddUserGameRecord(UserGameRecordDTO gameRecordDTO)
+        //{
+        //    var gameRecord = _userGameRecordMapper.Map<UserGameRecordDTO, UserGameRecords>(gameRecordDTO);
+        //    await _dal.AddUserGameRecords(gameRecord);
+        //}
 
         public async Task<List<DifficultyDTO>> GetAllDifficulties()
         {
@@ -169,16 +169,16 @@ namespace EduPlay.BLL
             _dal.RemoveUserGameRecords(record);
         }
 
-        public async Task UpdateTimesPlayed(string userId, Guid gameId)
-        {
-            var record = await _dal.GetUserGameRecordsByUserIdAndGameId(userId, gameId);
-            if (record == null)
-            {
-                throw new Exception("User record not found.");
-            }
-            var newTimesPlayed = record.TimesPlayed + 1;
-            await _dal.UpdateTimesPlayed(record.Id, newTimesPlayed);
-        }
+        //public async Task UpdateTimesPlayed(string userId, Guid gameId)
+        //{
+        //    var record = await _dal.GetUserGameRecordsByUserIdAndGameId(userId, gameId);
+        //    if (record == null)
+        //    {
+        //        throw new Exception("User record not found.");
+        //    }
+        //    var newTimesPlayed = record.TimesPlayed + 1;
+        //    await _dal.UpdateTimesPlayed(record.Id, newTimesPlayed);
+        //}
 
         public async Task UpdateUser(UserDTO user)
         {
@@ -191,9 +191,35 @@ namespace EduPlay.BLL
             var record = await _dal.GetUserGameRecordsByUserIdAndGameId(userId, gameId);
             if (record == null)
             {
-                throw new Exception("User record not found.");
+                await _dal.AddUserGameRecords(new UserGameRecords
+                {
+                    Id = Guid.NewGuid(),
+                    GameId = gameId,
+                    UserId = userId,
+                    Score = newScore,
+                    TimesPlayed = 1
+                });
             }
-            await _dal.UpdateUserGameRecords(record.Id, newScore);
+            else
+            {
+                if (newScore > record.Score)
+                {
+                    var game = await _dal.GetGameById(gameId);
+                    if (newScore <= game.MaxScore)
+                    {
+                        int newTimesPlayed = record.TimesPlayed + 1;
+                        await _dal.UpdateUserGameRecords(record.Id, newScore, newTimesPlayed);
+                    }
+                    else
+                    {
+                        throw new ArithmeticException();
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
         }
 
         public async Task UpdateUserProfilePicture(string userId, string picture)

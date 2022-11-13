@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace EduPlay.WebAPI.Controllers
 {
@@ -50,19 +51,34 @@ namespace EduPlay.WebAPI.Controllers
             return await _bll.GetGameById(id);
         }
 
-        [HttpPut]
-        [Route("updateUserGameRecord")]
-        public async Task<ActionResult> UpdateUserGameRecord(string userId, Guid gameId, int newScore)
+        private string GetCurrentUserId()
         {
-            //try
-            //{
+            ClaimsPrincipal currentUser = this.User;
+            return currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+        }
+
+        [HttpPut]
+        [Route("GameRecord")]
+        public async Task<ActionResult> GameRecord(Guid gameId, int newScore)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
                 await _bll.UpdateUserGameRecord(userId, gameId, newScore);
                 return Ok();
-            //}
-            //catch (Exception)
-            //{
-            //    return BadRequest("Some error happened while updating user's score");
-            //}
+            }
+            catch (ArithmeticException)
+            {
+                return BadRequest("The new score value is larger than game max score");
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest("New score is lower than the older score");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Some error happened while updating user's score");
+            }
         }
 
         [HttpGet]
@@ -107,41 +123,58 @@ namespace EduPlay.WebAPI.Controllers
             return await _bll.GetDifficultyByValue(value);
         }
 
-        [HttpPut]
-        [Route("UpdateTimesPlayed")]
-        public async Task<ActionResult> UpdateTimesPlayed(string userId, Guid gameId)
-        {
-            try
-            {
-                await _bll.UpdateTimesPlayed(userId, gameId);
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return BadRequest("Some error happened while updating times played parameter");
-            }
-        }
-
-        [HttpPost]
-        [Route("AddUserGameRecord")]
-        public async Task<ActionResult> AddUserGameRecord(UserGameRecordDTO record)
-        {
-            try
-            {
-                await _bll.AddUserGameRecord(record);
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return BadRequest("Some error happened while adding new game record for user");
-            }
-        }
-
         [HttpGet]
-        [Route("GenerateGuid")]
-        public ActionResult<Guid> GenerateGuid()
+        [Route("CheckUserAge")]
+        public async Task<ActionResult> CheckUserAge(Guid gameId)
         {
-            return Ok(Guid.NewGuid());
+            var game = await _bll.GetGameById(gameId);
+            var currentUser = await _bll.GetUserById(GetCurrentUserId());
+            int userAge = (int)((DateTime.Now - currentUser.DateOfBirth).TotalDays / 365.25);
+            if (userAge >= game.AgeLimit)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("Age limit not passed");
+            }
         }
+
+        //[HttpPut]
+        //[Route("UpdateTimesPlayed")]
+        //public async Task<ActionResult> UpdateTimesPlayed(string userId, Guid gameId)
+        //{
+        //    try
+        //    {
+        //        await _bll.UpdateTimesPlayed(userId, gameId);
+        //        return Ok();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return BadRequest("Some error happened while updating times played parameter");
+        //    }
+        //}
+
+        //[HttpPost]
+        //[Route("AddUserGameRecord")]
+        //public async Task<ActionResult> AddUserGameRecord(UserGameRecordDTO record)
+        //{
+        //    try
+        //    {
+        //        await _bll.AddUserGameRecord(record);
+        //        return Ok();
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return BadRequest("Some error happened while adding new game record for user");
+        //    }
+        //}
+
+        //[HttpGet]
+        //[Route("GenerateGuid")]
+        //public ActionResult<Guid> GenerateGuid()
+        //{
+        //    return Ok(Guid.NewGuid());
+        //}
     }
 }

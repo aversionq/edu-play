@@ -160,14 +160,17 @@ namespace EduPlay.DAL
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateUserGameRecords(Guid recordId, int newScore)
+        public async Task UpdateUserGameRecords(Guid recordId, int newScore, int newTimesPlayed)
         {
             var record = new UserGameRecords
             {
                 Id = recordId,
-                Score = newScore
+                Score = newScore,
+                TimesPlayed = newTimesPlayed
             };
-            _dbContext.UserGameRecords.Attach(record).Property(x => x.Score).IsModified = true;
+            _dbContext.UserGameRecords.Attach(record);
+            _dbContext.Entry(record).Property(x => x.Score).IsModified = true;
+            _dbContext.Entry(record).Property(x => x.TimesPlayed).IsModified = true;
             await _dbContext.SaveChangesAsync();
             _dbContext.Entry(record).State = EntityState.Detached;
         }

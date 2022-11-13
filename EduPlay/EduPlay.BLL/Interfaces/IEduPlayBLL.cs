@@ -8,7 +8,7 @@ namespace EduPlay.BLL.Interfaces
 {
     public interface IEduPlayBLL
     {
-        public Task AddUserGameRecord(UserGameRecordDTO gameRecordDTO);
+        // public Task AddUserGameRecord(UserGameRecordDTO gameRecordDTO);
         public Task UpdateUserGameRecord(string userId, Guid gameId, int newScore);
         public void RemoveGameRecordDTO(UserGameRecordDTO gameRecordDTO);
         public Task<List<UserGameRecordDTO>> GetUserGameRecordsByUserId(string id);
@@ -32,6 +32,6 @@ namespace EduPlay.BLL.Interfaces
         public Task<DifficultyDTO> GetDifficultyByValue(int value);
         public Task<List<GameDTO>> GetUserPassedGames(string userId);
         public Task<GameDTO> GetUserBestResult(string userId);
-        public Task UpdateTimesPlayed(string userId, Guid gameId);
+        // public Task UpdateTimesPlayed(string userId, Guid gameId);
     }
 }

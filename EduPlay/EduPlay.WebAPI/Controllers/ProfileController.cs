@@ -34,25 +34,39 @@ namespace EduPlay.WebAPI.Controllers
 
         [HttpGet]
         [Route("getUserGameRecords")]
-        public async Task<List<UserGameRecordDTO>> GetUserGameRecords(string id)
+        public async Task<ActionResult<List<UserGameRecordDTO>>> GetUserGameRecords()
         {
-            return await _bll.GetUserGameRecordsByUserId(id);
+            try
+            {
+                return await _bll.GetUserGameRecordsByUserId(GetCurrentUserId());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Some error happened while getting user game records");
+            }
         }
 
         [HttpGet]
         [Route("getUserPassedGames")]
-        public async Task<List<GameDTO>> GetUserPassedGames(string userId)
+        public async Task<ActionResult<List<GameDTO>>> GetUserPassedGames()
         {
-            return await _bll.GetUserPassedGames(userId);
+            try
+            {
+                return await _bll.GetUserPassedGames(GetCurrentUserId());
+            }
+            catch (Exception)
+            {
+                return BadRequest("Some error happened while getting user passed games");
+            }
         }
 
         [HttpGet]
         [Route("getUserBestResult")]
-        public async Task<ActionResult<GameDTO>> GetUserBestResult(string userId)
+        public async Task<ActionResult<GameDTO>> GetUserBestResult()
         {
             try
             {
-                return await _bll.GetUserBestResult(userId);
+                return await _bll.GetUserBestResult(GetCurrentUserId());
             }
             catch (Exception)
             {
@@ -77,13 +91,13 @@ namespace EduPlay.WebAPI.Controllers
             return currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
 
-        [HttpPut]
-        [Route("updateUser")]
-        public async Task<ActionResult> UpdateUser(UserDTO updatedUser)
-        {
-            await _bll.UpdateUser(updatedUser);
-            return Ok(updatedUser);
-        }
+        //[HttpPut]
+        //[Route("updateUser")]
+        //public async Task<ActionResult> UpdateUser(UserDTO updatedUser)
+        //{
+        //    await _bll.UpdateUser(updatedUser);
+        //    return Ok(updatedUser);
+        //}
 
         [HttpPut]
         [Route("updateUserProfilePicture")]

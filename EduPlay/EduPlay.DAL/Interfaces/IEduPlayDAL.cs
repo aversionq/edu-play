@@ -9,7 +9,7 @@ namespace EduPlay.DAL.Interfaces
     public interface IEduPlayDAL
     {
         public Task AddUserGameRecords(UserGameRecords gameRecord);
-        public Task UpdateUserGameRecords(Guid recordId, int newScore);
+        public Task UpdateUserGameRecords(Guid recordId, int newScore, int newTimesPlayed);
         public void RemoveUserGameRecords(UserGameRecords gameRecord);
         public Task<List<UserGameRecords>> GetUserGameRecordsByUserId(string userId);
         public Task<List<UserGameRecords>> GetUserGameRecordsByGameId(Guid gameId);
