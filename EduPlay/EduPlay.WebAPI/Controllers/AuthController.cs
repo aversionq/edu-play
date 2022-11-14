@@ -189,7 +189,7 @@ namespace EduPlay.WebAPI.Controllers
                 var url = $"{_configuration["AppUrl"]}/ResetPassword?email={model.Email}&token={validToken}";
 
                 var email = new MimeMessage();
-                email.From.Add(MailboxAddress.Parse("nadia.kutch@ethereal.email"));
+                email.From.Add(MailboxAddress.Parse(_configuration["MailSettings:Address"]));
                 email.To.Add(MailboxAddress.Parse(model.Email));
                 email.Subject = $"EduPlay password reset";
                 email.Body = new TextPart(TextFormat.Html) 
@@ -199,8 +199,9 @@ namespace EduPlay.WebAPI.Controllers
                 };
 
                 using var smtp = new SmtpClient();
-                await smtp.ConnectAsync("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
-                await smtp.AuthenticateAsync("nadia.kutch@ethereal.email", "7UVk9fgRCDRMchnmgA");
+                await smtp.ConnectAsync("smtp.mailosaur.net", 2525, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(_configuration["MailSettings:Address"],
+                    _configuration["MailSettings:Password"]);
                 await smtp.SendAsync(email);
                 await smtp.DisconnectAsync(true);
 
