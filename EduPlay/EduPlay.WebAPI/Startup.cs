@@ -43,6 +43,14 @@ namespace EduPlay.WebAPI
                 o.Password.RequireUppercase = false;
             });
 
+            // CORS Policy settings.
+            services.AddCors(o => o.AddPolicy("EduPlayPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
+
             // Swagger settings.
             services.AddSwaggerGen(o =>
             {
@@ -118,6 +126,8 @@ namespace EduPlay.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("EduPlayPolicy");
 
             app.UseAuthentication();
 
