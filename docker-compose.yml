@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+
+    dockerapi:
+        container_name: eduplay_backend_container
+        image: dockerapi
+        depends_on:
+            - "eduplay_pg"
+        build:
+          context: ./EduPlay
+          dockerfile: ./Dockerfile
+        ports:
+          - 5000:80
+        env_file:
+            - ./.docker/secrets.env
+
+    eduplay_pg:
+        # For setup: https://hub.docker.com/_/postgres
+        container_name: eduplay_pg
+        image: postgres:13.3
+        restart: always
+        volumes:
+            - .:/docker-entrypoint-initdb.d
+        env_file:
+            - ./.docker/secrets.env
+        ports:
+            - "5431:5432"
+
+    pgadmin:
+        # For the server host it will be: host.docker.internal
+        # For setup: https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
+        container_name: pgadmin4_container
+        image: dpage/pgadmin4
+        restart: always
+        env_file:
+            - ./.docker/secrets.env
+        ports:
+            - "5050:80"
