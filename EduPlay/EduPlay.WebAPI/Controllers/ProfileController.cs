@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using EduPlay.BLL.Interfaces;
 using EduPlay.BLL.Models;
-using EduPlay.Dependencies;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -25,10 +24,10 @@ namespace EduPlay.WebAPI.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
 
         public ProfileController(IWebHostEnvironment webHostEnvironment, 
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, IEduPlayBLL bll)
         {
             _webHostEnvironment = webHostEnvironment;
-            _bll = DependencyResolver.Instance.EduPlayBLL;
+            _bll = bll;
             _userManager = userManager;
         }
 
@@ -90,14 +89,6 @@ namespace EduPlay.WebAPI.Controllers
             ClaimsPrincipal currentUser = this.User;
             return currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
         }
-
-        //[HttpPut]
-        //[Route("updateUser")]
-        //public async Task<ActionResult> UpdateUser(UserDTO updatedUser)
-        //{
-        //    await _bll.UpdateUser(updatedUser);
-        //    return Ok(updatedUser);
-        //}
 
         [HttpPut]
         [Route("updateUserProfilePicture")]

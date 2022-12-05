@@ -12,5 +12,7 @@ namespace EduPlay.BLL.Models
         public Guid ThemeId { get; set; }
         public int AgeLimit { get; set; }
         public int MaxScore { get; set; }
+        public string Cover { get; set; }
+        public string Description { get; set; }
     }
 }

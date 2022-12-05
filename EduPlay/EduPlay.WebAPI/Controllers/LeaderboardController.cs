@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using EduPlay.BLL.Interfaces;
 using EduPlay.BLL.Models;
-using EduPlay.Dependencies;
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
@@ -15,9 +14,9 @@ namespace EduPlay.WebAPI.Controllers
     {
         private readonly IEduPlayBLL _bll;
 
-        public LeaderboardController()
+        public LeaderboardController(IEduPlayBLL bll)
         {
-            _bll = DependencyResolver.Instance.EduPlayBLL;
+            _bll = bll;
         }
 
         [HttpGet]
