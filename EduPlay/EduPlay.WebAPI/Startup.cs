@@ -17,7 +17,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EduPlay.Dependencies;
+using EduPlay.DAL.Entities;
+using EduPlay.DAL;
+using EduPlay.BLL;
+using EduPlay.DAL.Interfaces;
+using EduPlay.BLL.Interfaces;
 
 namespace EduPlay.WebAPI
 {
@@ -79,6 +83,9 @@ namespace EduPlay.WebAPI
                 });
             });
 
+            services.AddDbContext<EduPlayContext>(
+                options => options.UseNpgsql(Configuration.GetConnectionString("AppDb")));
+
             services.AddDbContext<AuthDbContext>(
                 options => options.UseNpgsql(Configuration.GetConnectionString("AppDb")));
 
@@ -107,6 +114,9 @@ namespace EduPlay.WebAPI
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                     };
                 });
+
+            services.AddScoped<IEduPlayDAL, EduPlayDAL>();
+            services.AddScoped<IEduPlayBLL, EduPlayBLL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

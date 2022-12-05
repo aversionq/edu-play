@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using EduPlay.BLL.Interfaces;
 using EduPlay.BLL.Models;
-using EduPlay.Dependencies;
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
@@ -18,9 +17,9 @@ namespace EduPlay.WebAPI.Controllers
     {
         private readonly IEduPlayBLL _bll;
 
-        public GameController()
+        public GameController(IEduPlayBLL bll)
         {
-            _bll = DependencyResolver.Instance.EduPlayBLL;
+            _bll = bll;
         }
 
         [HttpGet]
@@ -44,8 +43,8 @@ namespace EduPlay.WebAPI.Controllers
             return await _bll.GetGamesByThemeId(id);
         }
 
-        [HttpGet]
-        [Route("getGameById")]
+        [HttpGet("{id}")]
+        // [Route("getGameById")]
         public async Task<GameDTO> GetGameById(Guid id)
         {
             return await _bll.GetGameById(id);
@@ -58,8 +57,8 @@ namespace EduPlay.WebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("GameRecord")]
-        public async Task<ActionResult> GameRecord(Guid gameId, int newScore)
+        [Route("updateGameRecord")]
+        public async Task<ActionResult> GameRecord(Guid gameId, [FromBody] int newScore)
         {
             try
             {
@@ -139,42 +138,5 @@ namespace EduPlay.WebAPI.Controllers
                 return BadRequest("Age limit not passed");
             }
         }
-
-        //[HttpPut]
-        //[Route("UpdateTimesPlayed")]
-        //public async Task<ActionResult> UpdateTimesPlayed(string userId, Guid gameId)
-        //{
-        //    try
-        //    {
-        //        await _bll.UpdateTimesPlayed(userId, gameId);
-        //        return Ok();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return BadRequest("Some error happened while updating times played parameter");
-        //    }
-        //}
-
-        //[HttpPost]
-        //[Route("AddUserGameRecord")]
-        //public async Task<ActionResult> AddUserGameRecord(UserGameRecordDTO record)
-        //{
-        //    try
-        //    {
-        //        await _bll.AddUserGameRecord(record);
-        //        return Ok();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return BadRequest("Some error happened while adding new game record for user");
-        //    }
-        //}
-
-        //[HttpGet]
-        //[Route("GenerateGuid")]
-        //public ActionResult<Guid> GenerateGuid()
-        //{
-        //    return Ok(Guid.NewGuid());
-        //}
     }
 }

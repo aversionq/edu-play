@@ -10,9 +10,9 @@ namespace EduPlay.DAL.Entities
 {
     public partial class EduPlayContext : DbContext
     {
-        public EduPlayContext()
-        {
-        }
+        //public eduplaydbContext()
+        //{
+        //}
 
         public EduPlayContext(DbContextOptions<EduPlayContext> options)
             : base(options)
@@ -35,8 +35,6 @@ namespace EduPlay.DAL.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseNpgsql("Host=localhost;Database=EduPlay;Username=postgres;Password=159hawk");
             }
         }
 
@@ -166,6 +164,14 @@ namespace EduPlay.DAL.Entities
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .ValueGeneratedNever();
+
+                entity.Property(e => e.Cover)
+                    .HasColumnName("cover")
+                    .HasColumnType("character varying");
+
+                entity.Property(e => e.Description)
+                    .HasColumnName("description")
+                    .HasColumnType("character varying");
 
                 entity.Property(e => e.DifficultyId).HasColumnName("difficulty_id");
 

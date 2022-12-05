@@ -13,9 +13,9 @@ namespace EduPlay.DAL
     {
         private EduPlayContext _dbContext;
 
-        public EduPlayDAL()
+        public EduPlayDAL(EduPlayContext context)
         {
-            _dbContext = new EduPlayContext();
+            _dbContext = context;
             _dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
