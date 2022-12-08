@@ -43,8 +43,8 @@ namespace EduPlay.WebAPI.Controllers
             return await _bll.GetGamesByThemeId(id);
         }
 
-        [HttpGet("{id}")]
-        // [Route("getGameById")]
+        [HttpGet]
+        [Route("getGameById")]
         public async Task<GameDTO> GetGameById(Guid id)
         {
             return await _bll.GetGameById(id);
