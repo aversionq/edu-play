@@ -22,6 +22,8 @@ using EduPlay.DAL;
 using EduPlay.BLL;
 using EduPlay.DAL.Interfaces;
 using EduPlay.BLL.Interfaces;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace EduPlay.WebAPI
 {
@@ -133,7 +135,10 @@ namespace EduPlay.WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseStaticFiles("/Uploads");
+
+            // Temporarily removed
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 

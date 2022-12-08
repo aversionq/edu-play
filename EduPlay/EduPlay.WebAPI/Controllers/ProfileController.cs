@@ -11,6 +11,11 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System;
 using EduPlay.WebAPI.Auth;
+using System.Net.Http;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace EduPlay.WebAPI.Controllers
 {
@@ -22,13 +27,15 @@ namespace EduPlay.WebAPI.Controllers
         private readonly IEduPlayBLL _bll;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
 
         public ProfileController(IWebHostEnvironment webHostEnvironment, 
-            UserManager<ApplicationUser> userManager, IEduPlayBLL bll)
+            UserManager<ApplicationUser> userManager, IEduPlayBLL bll, IConfiguration configuration)
         {
             _webHostEnvironment = webHostEnvironment;
             _bll = bll;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -98,19 +105,48 @@ namespace EduPlay.WebAPI.Controllers
             {
                 if (pfp.files.Length > 0)
                 {
-                    var path = _webHostEnvironment.WebRootPath + @"\Uploads\";
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
                     var currentUserId = GetCurrentUser().Result.Id;
-                    var picturePath = path + pfp.files.FileName;
+                    const string imgExpiration = "15552000";
 
-                    using (FileStream fileStream = System.IO.File.Create(picturePath))
+                    using (var ms = new MemoryStream())
                     {
-                        await pfp.files.CopyToAsync(fileStream);
-                        await _bll.UpdateUserProfilePicture(currentUserId, picturePath);
-                        fileStream.Flush();
+                        await pfp.files.CopyToAsync(ms);
+                        var imageBytes = ms.ToArray();
+                        string byteString = Convert.ToBase64String(imageBytes);
+                        using (var client = new HttpClient())
+                        {
+                            client.BaseAddress = new Uri("https://api.imgbb.com");
+                            var content = new[]
+                            {
+                                new KeyValuePair<string, string>("expiration", imgExpiration),
+                                new KeyValuePair<string, string>("key", _configuration["ImageCDN:APIKey"]),
+                                new KeyValuePair<string, string>("image", byteString)
+                            };
+
+                            var encodedItems = content.Select(i => WebUtility.UrlEncode(i.Key) + "=" + WebUtility.UrlEncode(i.Value));
+                            var encodedContent = new StringContent(String.Join("&", encodedItems), null, "application/x-www-form-urlencoded");
+
+                            var result = await client.PostAsync("/1/upload", encodedContent);
+                            var response = await result.Content.ReadAsStreamAsync();
+
+                            using var sr = new StreamReader(response);
+                            using var jr = new JsonTextReader(sr);
+                            JsonSerializer serializer = new JsonSerializer();
+
+                            try
+                            {
+                                dynamic jsonResponse = serializer.Deserialize(jr);
+                                var imageUrlDynamic = jsonResponse.data.url;
+                                var imageUrlString = Convert.ToString(imageUrlDynamic);
+                                await _bll.UpdateUserProfilePicture(currentUserId, imageUrlString);
+                            }
+                            catch (JsonReaderException)
+                            {
+                                return "Failed to upload profile picture";
+                            }
+                        }
+                        ms.Flush();
+
                         return $"User profile picture uploaded";
                     }
                 }

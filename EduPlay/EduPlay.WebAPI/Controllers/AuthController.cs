@@ -28,6 +28,7 @@ namespace EduPlay.WebAPI.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private const string _defaultAvatar = "https://i.ibb.co/NCBX5N4/265ee71be335.jpg";
 
         public AuthController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
@@ -57,7 +58,7 @@ namespace EduPlay.WebAPI.Controllers
                 SecurityStamp = Guid.NewGuid().ToString(),
                 IsBanned = false,
                 UserName = model.UserName,
-                ProfilePicture = _webHostEnvironment.WebRootPath + @"\eduplay_default.jpg"
+                ProfilePicture = _defaultAvatar
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -107,7 +108,7 @@ namespace EduPlay.WebAPI.Controllers
                 SecurityStamp = Guid.NewGuid().ToString(),
                 IsBanned = false,
                 UserName = model.UserName,
-                ProfilePicture = _webHostEnvironment.WebRootPath + @"\eduplay_default.jpg"
+                ProfilePicture = _defaultAvatar
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
