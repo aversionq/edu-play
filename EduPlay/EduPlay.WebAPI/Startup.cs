@@ -86,10 +86,16 @@ namespace EduPlay.WebAPI
             });
 
             services.AddDbContext<EduPlayContext>(
-                options => options.UseNpgsql(Configuration.GetConnectionString("AppDb")));
+                options => options.UseNpgsql(Configuration.GetConnectionString("AppDb"), builder =>
+                {
+                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                }));
 
             services.AddDbContext<AuthDbContext>(
-                options => options.UseNpgsql(Configuration.GetConnectionString("AppDb")));
+                options => options.UseNpgsql(Configuration.GetConnectionString("AppDb"), builder =>
+                {
+                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                }));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AuthDbContext>()
