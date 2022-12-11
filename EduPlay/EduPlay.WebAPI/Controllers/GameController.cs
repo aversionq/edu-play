@@ -22,13 +22,14 @@ namespace EduPlay.WebAPI.Controllers
             _bll = bll;
         }
 
+        [AllowAnonymous]
         [HttpGet]
-        [Route("getAllGames")]
         public async Task<List<GameDTO>> GetAllGames()
         {
             return await _bll.GetAllGames();
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("getGamesByDifficultyId")]
         public async Task<List<GameDTO>> GetGamesByDifficultyId(Guid id)
@@ -36,6 +37,7 @@ namespace EduPlay.WebAPI.Controllers
             return await _bll.GetGamesByDifficultyId(id);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("getGamesByThemeId")]
         public async Task<List<GameDTO>> GetGamesByThemeId(Guid id)
@@ -43,8 +45,7 @@ namespace EduPlay.WebAPI.Controllers
             return await _bll.GetGamesByThemeId(id);
         }
 
-        [HttpGet]
-        [Route("getGameById")]
+        [HttpGet("{id}")]
         public async Task<GameDTO> GetGameById(Guid id)
         {
             return await _bll.GetGameById(id);
@@ -78,48 +79,6 @@ namespace EduPlay.WebAPI.Controllers
             {
                 return BadRequest("Some error happened while updating user's score");
             }
-        }
-
-        [HttpGet]
-        [Route("getAllThemes")]
-        public async Task<List<ThemeDTO>> GetAllThemes()
-        {
-            return await _bll.GetAllThemes();
-        }
-
-        [HttpGet]
-        [Route("getAllDifficulties")]
-        public async Task<List<DifficultyDTO>> GetAllDifficulties()
-        {
-            return await _bll.GetAllDifficulties();
-        }
-
-        [HttpGet]
-        [Route("getThemeById")]
-        public async Task<ThemeDTO> GetThemeById(Guid id)
-        {
-            return await _bll.GetThemeById(id);
-        }
-
-        [HttpGet]
-        [Route("getDifficultyById")]
-        public async Task<DifficultyDTO> GetDifficultyById(Guid id)
-        {
-            return await _bll.GetDifficultyById(id);
-        }
-
-        [HttpGet]
-        [Route("getThemeByName")]
-        public async Task<ThemeDTO> GetThemeByName(string name)
-        {
-            return await _bll.GetThemeByName(name);
-        }
-
-        [HttpGet]
-        [Route("getDifficultyByValue")]
-        public async Task<DifficultyDTO> GetDifficultyByValue(int value)
-        {
-            return await _bll.GetDifficultyByValue(value);
         }
 
         [HttpGet]

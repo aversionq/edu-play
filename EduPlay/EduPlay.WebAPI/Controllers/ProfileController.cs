@@ -171,10 +171,13 @@ namespace EduPlay.WebAPI.Controllers
                 await _bll.UpdateUserUserName(userId, userName);
                 return Ok($"Username updated");
             }
+            catch (AggregateException)
+            {
+                return BadRequest("This username is already taken");
+            }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, 
-                    "Some error happened while updating username");
+                return BadRequest("Some error happened while updating username");
             }
         }
 
@@ -206,14 +209,12 @@ namespace EduPlay.WebAPI.Controllers
                     }
                     else
                     {
-                        return StatusCode(StatusCodes.Status500InternalServerError,
-                            "Password rules have been violated");
+                        return BadRequest("Password rules have been violated");
                     }
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError,
-                            "Wrong old password");
+                    return BadRequest("Wrong old password");
                 }
             }
             else
