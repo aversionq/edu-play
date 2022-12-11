@@ -17,6 +17,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EduPlay.DAL.Entities;
+using EduPlay.DAL;
+using EduPlay.BLL;
+using EduPlay.DAL.Interfaces;
+using EduPlay.BLL.Interfaces;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace EduPlay.WebAPI
 {
@@ -41,6 +48,14 @@ namespace EduPlay.WebAPI
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequireUppercase = false;
             });
+
+            // CORS Policy settings.
+            services.AddCors(o => o.AddPolicy("EduPlayPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
 
             // Swagger settings.
             services.AddSwaggerGen(o =>
@@ -70,12 +85,22 @@ namespace EduPlay.WebAPI
                 });
             });
 
+            services.AddDbContext<EduPlayContext>(
+                options => options.UseNpgsql(Configuration.GetConnectionString("AppDb"), builder =>
+                {
+                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                }));
+
             services.AddDbContext<AuthDbContext>(
-                options => options.UseNpgsql(Configuration.GetConnectionString("AppDb")));
+                options => options.UseNpgsql(Configuration.GetConnectionString("AppDb"), builder =>
+                {
+                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                }));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AuthDbContext>()
                 .AddDefaultTokenProviders();
+
 
             // JWT settings.
             services.AddAuthentication(options =>
@@ -97,6 +122,9 @@ namespace EduPlay.WebAPI
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                     };
                 });
+
+            services.AddScoped<IEduPlayDAL, EduPlayDAL>();
+            services.AddScoped<IEduPlayBLL, EduPlayBLL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -113,9 +141,14 @@ namespace EduPlay.WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseStaticFiles("/Uploads");
+
+            // Temporarily removed
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("EduPlayPolicy");
 
             app.UseAuthentication();
 
